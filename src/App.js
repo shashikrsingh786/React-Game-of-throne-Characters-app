@@ -1,24 +1,32 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Header from './component/ui/Header';
+import axios from 'axios';
+import CharacterGrid from './component/characters/CharacterGrid';
 
 function App() {
+
+  const [items, setItems] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchItems = async () => {
+   const result = await axios(
+      `https://thronesapi.com/api/v2/Characters`
+    )
+    console.log(result.data);
+    setItems(result.data);
+    setLoading(false);
+  }
+  fetchItems();
+},[]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Header />
+    <CharacterGrid  isLoading = {isLoading} items = {items}/>
+
+    </>
   );
 }
 
